@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Boids Simulation</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            font-family: 'PT Serif', serif;
+            display: flex;
+            flex-direction: row;
+            height: 100vh;
+        }
+
+        canvas {
+            margin: auto;
+            display: block;
+            outline: 1px solid #0c112250;
+            max-height: 100vh;
+            max-width: 100vh;
+        }
+
+        h1,
+        h2 {
+            margin: 0;
+            font-weight: 700;
+        }
+
+        p {
+            margin: 0;
+        }
+
+        h2 {
+            font-size: 12pt;
+        }
+
+        a {
+            color: blue;
+        }
+
+        .window {
+            border-radius: 16px;
+            position: fixed;
+            top: 32px;
+            padding: 24px;
+            background: #fffbf7b0;
+            backdrop-filter: blur(6px);
+            outline: 1px solid #0c112250;
+            width: 360px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .window.left {
+            left: 32px;
+        }
+
+        .window.right {
+            right: 32px;
+        }
+
+        .setting {
+            display: flex;
+            flex-direction: row;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .setting input[type=range] {
+            flex-grow: 1;
+        }
+
+        .setting input[type=number] {
+            width: 56px;
+            text-align: right;
+            background: transparent;
+            border: none;
+            font-family: 'PT Serif', serif;
+            font-size: 12pt;
+        }
+
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+
+        .button-row {
+            display: flex;
+            flex-direction: row;
+            gap: 4px;
+        }
+
+        .button-row button {
+            flex-grow: 1;
+            flex-basis: 0;
+        }
+
+        button {
+            cursor: pointer;
+            background: #FFFFFF80;
+            outline: 1px solid #0c112250;
+            border: none;
+            padding: 6px 12px;
+            font-size: 12pt;
+            margin: 2px;
+            border-radius: 4px;
+            font-family: 'PT Serif', serif;
+        }
+
+        .resolution-settings {
+            display: flex;
+            flex-direction: row;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .resolution-settings input[type=number] {
+            background: #FFFFFF80;
+            outline: 1px solid #0c112250;
+            border: none;
+            padding: 6px 12px;
+            font-size: 12pt;
+            margin: 2px;
+            border-radius: 4px;
+            font-family: 'PT Serif', serif;
+            min-width: 0;
+            flex-grow: 1;
+            flex-shrink: 1;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="window left">
+        <h1>Painting boids</h1>
+        <p>Create artwork using the <a href="https://en.wikipedia.org/wiki/Boids">boids</a> artificial flocking
+            simulation. Imagine a bunch of birds carrying leaky paint buckets.</p>
+        <div class="button-row">
+            <button id="save-btn">Save</button>
+            <button id="reset-btn">Reset</button>
+            <button id="pause-btn">Pause</button>
+        </div>
+        <h2>Resolution</h2>
+        <div>
+            <input type="checkbox" id="auto-res-checkbox" checked />
+            <label for="auto-res-checkbox">Automatic (scale with window)</label>
+          </div>
+        <div class="resolution-settings">
+            <input class="" type="number" placeholder="Width">
+            <p>x</p>
+            <input type="number" placeholder="Height">
+            <button id="resolution-button">Apply</button>
+        </div>
+
+    </div>
+    <div class="window right">
+        <div id="settings"></div>
+    </div>
+    <script src="rainbow.js"></script>
+    <script src="boids.js"></script>
+    <script src="settings.js"></script>
+    <script src="index.js"></script>
+</body>
+
+</html>
