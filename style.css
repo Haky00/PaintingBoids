@@ -194,8 +194,62 @@ html {
     background: #eeeef1;
 }
 
+#presets-list {
+    margin-top: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.preset {
+    gap: 8px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.preset img {
+    outline: 1px solid #0c112250;
+    width: 50px;
+    height: 50px;
+    border-radius: 4px;
+}
+
+.preset div {
+    flex-grow: 1;
+}
+
 @media (prefers-color-scheme: dark) {
     html {
         background: #1d1e21;
+    }
+
+    .window {
+        color: white;
+        background: #121111c0;
+        outline: 1px solid #9cade350;
+    }
+
+    a {
+        color: lightskyblue;
+    }
+
+    button {
+        background-color: #70707080;
+        color: white;
+        outline: 1px solid rgba(185, 198, 240, 0.314);
+    }
+
+    button.toggled {
+        background-color: #3188bf80;
+        color: lightskyblue;
+        outline: 1px solid lightskyblue;
+    }
+
+    input[type=text],
+    input[type=number] {
+        background-color: #70707080 !important;
+        color: white !important;
+        outline: 1px solid rgba(185, 198, 240, 0.314) !important;
     }
 }

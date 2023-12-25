@@ -50,7 +50,7 @@
         </div>
         <h2>Boid display</h2>
         <div>
-            <input type="checkbox" id="boid-display-checkbox"/>
+            <input type="checkbox" id="boid-display-checkbox" />
             <label for="boid-display-checkbox">Don't leave trails</label>
         </div>
     </div>
@@ -60,10 +60,17 @@
             <button id="colors-btn">Colors</button>
             <button id="boids-btn">Boids</button>
         </div>
-        <div id="presets"></div>
+        <div id="presets">
+            <div id="presets-list">
+                <!-- <div class="preset">
+                    <img src="image.png">
+                    <div>Preset name</div>
+                    <button>Use</button>
+                </div> -->
+            </div>
+        </div>
         <div id="colors" class="hidden">
             <div id="colors-list">
-
             </div>
             <button id="add-color-btn">+ Add color</button>
             <!-- <div class="color">
@@ -81,6 +88,7 @@
     <script src="rainbow.js"></script>
     <script src="boids.js"></script>
     <script src="settings.js"></script>
+    <script src="presets.js"></script>
     <script src="index.js"></script>
 </body>
 

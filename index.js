@@ -23,16 +23,90 @@ const canvasColorButton = document.getElementById('canvas-color-apply');
 const canvasColorInput = document.getElementById('canvas-color-input');
 const boidDisplayCheckbox = document.getElementById('boid-display-checkbox');
 
+var boids, backgroundColor, colorList;
+
 var autoSize = true;
 var width, height;
 var boidsNumber = 150;
 var activeTab = 0;
 var scale = 1;
-var backgroundColor = "#e6dfcd"
 var boidDisplay = false;
 
 const color = new ColorInfo('#FFA500', 150);
 color.createColorElement();
+
+function applyPreset(preset) {
+    const opts = preset.opts;
+    const colors = preset.colors;
+    const colorWeights = preset.colorWeights;
+    backgroundColor = preset.backgroundColor;
+    boidsNumber = opts.boids;
+    boids = new Boids(opts);
+    const settings = [
+        new NumericValueSetting('Speed limit', opts.speedLimit, 0, 10, 0.01, 2, function (newValue) {
+            boids.change({ speedLimit: newValue });
+        }),
+        new NumericValueSetting('Acceleration limit', opts.accelerationLimit, 0, 10, 0.01, 2, function (newValue) {
+            boids.change({ accelerationLimit: newValue });
+        }),
+        new NumericValueSetting('Alignment distance', opts.alignmentDistance, 0, 1000, 0.1, 1, function (newValue) {
+            boids.change({ alignmentDistance: newValue });
+        }),
+        new NumericValueSetting('Alignment force', opts.alignmentForce, 0, 0.5, 0.001, 3, function (newValue) {
+            boids.change({ alignmentForce: newValue });
+        }),
+        new NumericValueSetting('Cohesion distance', opts.cohesionDistance, 0, 1000, 0.1, 1, function (newValue) {
+            boids.change({ cohesionDistance: newValue });
+        }),
+        new NumericValueSetting('Cohesion force', opts.cohesionForce, 0, 0.5, 0.001, 3, function (newValue) {
+            boids.change({ cohesionForce: newValue });
+        }),
+        new NumericValueSetting('Separation distance', opts.separationDistance, 0, 1000, 0.1, 1, function (newValue) {
+            boids.change({ separationDistance: newValue });
+        }),
+        new NumericValueSetting('Separation force', opts.separationForce, 0, 0.5, 0.001, 3, function (newValue) {
+            boids.change({ separationForce: newValue });
+        })
+    ];
+    document.getElementById('settings').innerHTML = '';
+    for (var i = 0; i < settings.length; i++) {
+        settings[i].createElements();
+    }
+    var colorInfos = [];
+    for (var i = 0; i < colors.length; i++) {
+        colorInfos.push(new ColorInfo(colors[i], colorWeights[i]));
+    }
+    colorList = new ColorList(colorInfos);
+
+    canvasColorInput.value = backgroundColor;
+    canvasColorField.value = backgroundColor.substring(1, 7);
+    boidsNumberField.value = boidsNumber;
+
+    reset(true);
+    boids.addEventListener('tick', tick);
+}
+
+function tick() {
+    var boidData = boids.boids
+        , halfHeight = canvas.height / 2
+        , halfWidth = canvas.width / 2
+        , boundsCheckW = halfWidth / scale
+        , boundsCheckH = halfHeight / scale
+    if (boidDisplay) {
+        ctx.fillStyle = backgroundColor + "40";
+        ctx.fillRect(0, 0, canvas.width, canvas.height)
+    }
+
+    colorList.resetNextColor();
+    for (var i = 0, l = boidData.length, x, y; i < l; i += 1) {
+        ctx.fillStyle = colorList.getNextColor();
+        x = boidData[i][0]; y = boidData[i][1]
+        diff = angleBetweenVectors(boidData[i][SPEEDX], boidData[i][SPEEDY], boidData[i][SMOOTHSPEEDX], boidData[i][SMOOTHSPEEDY]);
+        boidData[i][0] = x = x > boundsCheckW ? -boundsCheckW : -x > boundsCheckW ? boundsCheckW : x
+        boidData[i][1] = y = y > boundsCheckH ? -boundsCheckH : -y > boundsCheckH ? boundsCheckH : y
+        drawFilledCircle(ctx, (x * scale + halfWidth), (y * scale + halfHeight), (2 + 14 * diff) * scale)
+    }
+}
 
 function toggleTab(n, state) {
     var tabButton, tab;
@@ -160,6 +234,15 @@ function toggleUi() {
     rightWindow.classList.toggle("hidden");
 }
 
+var canvas = document.createElement('canvas');
+var ctx = canvas.getContext('2d');
+canvas.onclick = toggleUi;
+document.body.style.margin = '0';
+document.body.style.padding = '0';
+document.body.appendChild(canvas);
+
+applyPreset(presets[0].preset);
+
 document.body.onkeyup = function (e) {
     if (e.key == " " ||
         e.code == "Space" ||
@@ -176,47 +259,9 @@ document.body.onkeyup = function (e) {
     }
 }
 
-var defaultOpts = {
-    boids: 250,
-    speedLimit: 2,
-    accelerationLimit: 0.8,
-    alignmentDistance: 180,
-    alignmentForce: 0.125,
-    cohesionDistance: 180,
-    cohesionForce: 0.015,
-    separationDistance: 50,
-    separationForce: 0.04,
-};
-
-const settings = [
-    new NumericValueSetting('Speed limit', defaultOpts.speedLimit, 0, 10, 0.01, 2, function (newValue) {
-        boids.change({ speedLimit: newValue });
-    }),
-    new NumericValueSetting('Acceleration limit', defaultOpts.accelerationLimit, 0, 10, 0.01, 2, function (newValue) {
-        boids.change({ accelerationLimit: newValue });
-    }),
-    new NumericValueSetting('Alignment distance', defaultOpts.alignmentDistance, 0, 1000, 0.1, 1, function (newValue) {
-        boids.change({ alignmentDistance: newValue });
-    }),
-    new NumericValueSetting('Alignment force', defaultOpts.alignmentForce, 0, 0.5, 0.001, 3, function (newValue) {
-        boids.change({ alignmentForce: newValue });
-    }),
-    new NumericValueSetting('Cohesion distance', defaultOpts.cohesionDistance, 0, 1000, 0.1, 1, function (newValue) {
-        boids.change({ cohesionDistance: newValue });
-    }),
-    new NumericValueSetting('Cohesion force', defaultOpts.cohesionForce, 0, 0.5, 0.001, 3, function (newValue) {
-        boids.change({ cohesionForce: newValue });
-    }),
-    new NumericValueSetting('Separation distance', defaultOpts.separationDistance, 0, 1000, 0.1, 1, function (newValue) {
-        boids.change({ separationDistance: newValue });
-    }),
-    new NumericValueSetting('Separation force', defaultOpts.separationForce, 0, 0.5, 0.001, 3, function (newValue) {
-        boids.change({ separationForce: newValue });
-    })
-];
-
-for (var i = 0; i < settings.length; i++) {
-    settings[i].createElements();
+for(var i = 0; i < presets.length; i++) {
+    presets[i].addToPresetsList();
+    presets[i].addEventListener('click', (event) => applyPreset(event.preset));
 }
 
 resetButton.onclick = () => reset(true);
@@ -237,20 +282,8 @@ boidDisplayCheckbox.onchange = boidDisplayChanged;
 
 var playing = true;
 
-
-var canvas = document.createElement('canvas')
-    , ctx = canvas.getContext('2d')
-    , boids = new Boids(defaultOpts);
-
-canvas.onclick = toggleUi;
-
 window.onresize = () => reset(false);
-reset(true);
 window.onresize()
-
-document.body.style.margin = '0'
-document.body.style.padding = '0'
-document.body.appendChild(canvas)
 
 var currentTime = 0;
 var lastTime = 0;
@@ -264,38 +297,6 @@ function step(t) {
 }
 
 window.requestAnimationFrame(step);
-
-var colorList = new ColorList([new ColorInfo('#ca762e', 1), new ColorInfo('#242754', 1), new ColorInfo('#e6dfcd', 1), new ColorInfo('#1f1724', 1), new ColorInfo('#a4a2ad', 1), new ColorInfo('#a44a28', 1), new ColorInfo('#e7ab2a', 1)]);
-//colors = ['#000000']
-
-boids.addEventListener('tick', function () {
-    var boidData = boids.boids
-        , halfHeight = canvas.height / 2
-        , halfWidth = canvas.width / 2
-        , boundsCheckW = halfWidth / scale
-        , boundsCheckH = halfHeight / scale
-    if (boidDisplay) {
-        ctx.fillStyle = backgroundColor + "40";
-        ctx.fillRect(0, 0, canvas.width, canvas.height)
-    }
-
-    colorList.resetNextColor();
-    for (var i = 0, l = boidData.length, x, y; i < l; i += 1) {
-        ctx.fillStyle = colorList.getNextColor();
-        x = boidData[i][0]; y = boidData[i][1]
-        diff = angleBetweenVectors(boidData[i][SPEEDX], boidData[i][SPEEDY], boidData[i][SMOOTHSPEEDX], boidData[i][SMOOTHSPEEDY]);
-        console.log(`${boidData[i][SPEEDX]} --- ${boidData[i][SMOOTHSPEEDX]}`);
-        // diff = directionDifference(boidData[i][SPEEDX], boidData[i][SPEEDY], boidData[i][LASTSPEEDX], boidData[i][LASTSPEEDY])
-        // diff -= 1 - (1 / 200)
-        // diff = diff > 0 ? diff * 200 : 0
-        // diff = 1 - diff
-        // diff = diff * diff * diff;
-        // wrap around the screen
-        boidData[i][0] = x = x > boundsCheckW ? -boundsCheckW : -x > boundsCheckW ? boundsCheckW : x
-        boidData[i][1] = y = y > boundsCheckH ? -boundsCheckH : -y > boundsCheckH ? boundsCheckH : y
-        drawFilledCircle(ctx, (x * scale + halfWidth), (y * scale + halfHeight), (2 + 14 * diff) * scale)
-    }
-})
 
 function drawFilledCircle(ctx, x, y, radius) {
     ctx.beginPath();
