@@ -123,7 +123,7 @@ class ColorList {
 
     addColor(color) {
         this.colors.push(color);
-        color.addEventListener('delete', this.removeColor);
+        color.addEventListener('delete', () => this.removeColor(color));
         this.redrawElements();
     }
 

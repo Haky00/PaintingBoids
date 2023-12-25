@@ -19,9 +19,12 @@ class Boids extends EventTarget {
         this.accelerationLimitRoot = opts.accelerationLimit || 1
         this.speedLimit = Math.pow(this.speedLimitRoot, 2)
         this.accelerationLimit = Math.pow(this.accelerationLimitRoot, 2)
-        this.separationDistance = Math.pow(opts.separationDistance || 60, 2)
-        this.alignmentDistance = Math.pow(opts.alignmentDistance || 180, 2)
-        this.cohesionDistance = Math.pow(opts.cohesionDistance || 180, 2)
+        this.separationDistanceRoot = opts.separationDistance || 60;
+        this.separationDistance = Math.pow(this.separationDistanceRoot, 2)
+        this.alignmentDistanceRoot = opts.alignmentDistance || 180;
+        this.alignmentDistance = Math.pow(this.alignmentDistanceRoot, 2)
+        this.cohesionDistanceRoot = opts.cohesionDistance || 180;
+        this.cohesionDistance = Math.pow(this.cohesionDistanceRoot, 2)
         this.separationForce = opts.separationForce || 0.15
         this.cohesionForce = opts.cohesionForce || 0.1
         this.alignmentForce = opts.alignmentForce || opts.alignment || 0.25
@@ -45,11 +48,14 @@ class Boids extends EventTarget {
         })
     }
     change(opts) {
+        this.separationDistanceRoot = opts.separationDistance || this.separationDistanceRoot;
+        this.alignmentDistanceRoot = opts.alignmentDistance || this.alignmentDistanceRoot;
+        this.cohesionDistanceRoot = opts.cohesionDistance || this.cohesionDistanceRoot;
         this.speedLimitRoot = opts.speedLimit || this.speedLimitRoot;
         this.accelerationLimitRoot = opts.accelerationLimit || this.accelerationLimitRoot;
-        this.separationDistance = Math.pow(opts.separationDistance, 2) || this.separationDistance;
-        this.alignmentDistance = Math.pow(opts.alignmentDistance, 2) || this.alignmentDistance;
-        this.cohesionDistance = Math.pow(opts.cohesionDistance, 2) || this.cohesionDistance;
+        this.separationDistance = Math.pow(this.separationDistanceRoot, 2);
+        this.alignmentDistance = Math.pow(this.alignmentDistanceRoot, 2);
+        this.cohesionDistance = Math.pow(this.cohesionDistanceRoot, 2);
         this.separationForce = opts.separationForce || this.separationForce;
         this.cohesionForce = opts.cohesionForce || this.cohesionForce;
         this.alignmentForce = opts.alignmentForce || this.alignmentForce;
