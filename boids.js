@@ -4,6 +4,8 @@ var POSITIONX = 0
     , SPEEDY = 3
     , ACCELERATIONX = 4
     , ACCELERATIONY = 5
+    , SMOOTHSPEEDX = 6
+    , SMOOTHSPEEDY = 7
 
 class Boids extends EventTarget {
     constructor(opts, callback) {
@@ -33,6 +35,8 @@ class Boids extends EventTarget {
                 0, 0 // speed
                 ,
                 0, 0 // acceleration
+                ,
+                0, 0 //last speed
             ]
         }
 
@@ -43,9 +47,9 @@ class Boids extends EventTarget {
     change(opts) {
         this.speedLimitRoot = opts.speedLimit || this.speedLimitRoot;
         this.accelerationLimitRoot = opts.accelerationLimit || this.accelerationLimitRoot;
-        this.separationDistance = Math.pow(opts.separationDistance, 2) ||  this.separationDistance;
+        this.separationDistance = Math.pow(opts.separationDistance, 2) || this.separationDistance;
         this.alignmentDistance = Math.pow(opts.alignmentDistance, 2) || this.alignmentDistance;
-        this.cohesionDistance = Math.pow(opts.cohesionDistance, 2) ||  this.cohesionDistance;
+        this.cohesionDistance = Math.pow(opts.cohesionDistance, 2) || this.cohesionDistance;
         this.separationForce = opts.separationForce || this.separationForce;
         this.cohesionForce = opts.cohesionForce || this.cohesionForce;
         this.alignmentForce = opts.alignmentForce || this.alignmentForce;
@@ -53,14 +57,17 @@ class Boids extends EventTarget {
         this.speedLimit = Math.pow(this.speedLimitRoot, 2)
         this.accelerationLimit = Math.pow(this.accelerationLimitRoot, 2)
     }
-    reset(width, height) {
-        for (var i = 0; i < this.boids.length; i++) {
+    reset(boids, width, height) {
+        this.boids = []
+        for (var i = 0; i < boids; i++) {
             this.boids[i] = [
                 width / 2 - Math.random() * width, height / 2 - Math.random() * height // position
                 ,
                 0, 0 // speed
                 ,
                 0, 0 // acceleration
+                ,
+                0, 0
             ]
         }
     }
@@ -136,9 +143,12 @@ class Boids extends EventTarget {
                     boids[current][ACCELERATIONY] *= ratio
                 }
             }
-
-            boids[current][SPEEDX] = boids[current][SPEEDX] + boids[current][ACCELERATIONX] * 0.5 + (-0.1 + Math.random() * 0.2) 
-            boids[current][SPEEDY] = boids[current][SPEEDY] + boids[current][ACCELERATIONY] * 0.5 + (-0.1 + Math.random() * 0.2) 
+            boids[current][SMOOTHSPEEDX] *= 0.95;
+            boids[current][SMOOTHSPEEDY] *= 0.95;
+            boids[current][SPEEDX] = boids[current][SPEEDX] + boids[current][ACCELERATIONX] * 0.5 + (-0.1 + Math.random() * 0.2);
+            boids[current][SPEEDY] = boids[current][SPEEDY] + boids[current][ACCELERATIONY] * 0.5 + (-0.1 + Math.random() * 0.2);
+            boids[current][SMOOTHSPEEDX] += 0.05 * boids[current][SPEEDX];
+            boids[current][SMOOTHSPEEDY] += 0.05 * boids[current][SPEEDY];
 
             if (speedLimit) {
                 distSquared = boids[current][SPEEDX] * boids[current][SPEEDX] + boids[current][SPEEDY] * boids[current][SPEEDY]

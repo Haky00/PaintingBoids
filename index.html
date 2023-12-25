@@ -7,143 +7,11 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-            font-family: 'PT Serif', serif;
-            display: flex;
-            flex-direction: row;
-            height: 100vh;
-        }
-
-        canvas {
-            margin: auto;
-            display: block;
-            outline: 1px solid #0c112250;
-            max-height: 100vh;
-            max-width: 100vh;
-        }
-
-        h1,
-        h2 {
-            margin: 0;
-            font-weight: 700;
-        }
-
-        p {
-            margin: 0;
-        }
-
-        h2 {
-            font-size: 12pt;
-        }
-
-        a {
-            color: blue;
-        }
-
-        .window {
-            border-radius: 16px;
-            position: fixed;
-            top: 32px;
-            padding: 24px;
-            background: #fffbf7b0;
-            backdrop-filter: blur(6px);
-            outline: 1px solid #0c112250;
-            width: 360px;
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        .window.left {
-            left: 32px;
-        }
-
-        .window.right {
-            right: 32px;
-        }
-
-        .setting {
-            display: flex;
-            flex-direction: row;
-            gap: 8px;
-            align-items: center;
-        }
-
-        .setting input[type=range] {
-            flex-grow: 1;
-        }
-
-        .setting input[type=number] {
-            width: 56px;
-            text-align: right;
-            background: transparent;
-            border: none;
-            font-family: 'PT Serif', serif;
-            font-size: 12pt;
-        }
-
-        input::-webkit-outer-spin-button,
-        input::-webkit-inner-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
-        }
-
-        input[type=number] {
-            -moz-appearance: textfield;
-        }
-
-        .button-row {
-            display: flex;
-            flex-direction: row;
-            gap: 4px;
-        }
-
-        .button-row button {
-            flex-grow: 1;
-            flex-basis: 0;
-        }
-
-        button {
-            cursor: pointer;
-            background: #FFFFFF80;
-            outline: 1px solid #0c112250;
-            border: none;
-            padding: 6px 12px;
-            font-size: 12pt;
-            margin: 2px;
-            border-radius: 4px;
-            font-family: 'PT Serif', serif;
-        }
-
-        .resolution-settings {
-            display: flex;
-            flex-direction: row;
-            gap: 8px;
-            align-items: center;
-        }
-
-        .resolution-settings input[type=number] {
-            background: #FFFFFF80;
-            outline: 1px solid #0c112250;
-            border: none;
-            padding: 6px 12px;
-            font-size: 12pt;
-            margin: 2px;
-            border-radius: 4px;
-            font-family: 'PT Serif', serif;
-            min-width: 0;
-            flex-grow: 1;
-            flex-shrink: 1;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-    <div class="window left">
+    <div class="window left gap" id="left-window">
         <h1>Painting boids</h1>
         <p>Create artwork using the <a href="https://en.wikipedia.org/wiki/Boids">boids</a> artificial flocking
             simulation. Imagine a bunch of birds carrying leaky paint buckets.</p>
@@ -154,20 +22,62 @@
         </div>
         <h2>Resolution</h2>
         <div>
-            <input type="checkbox" id="auto-res-checkbox" checked />
-            <label for="auto-res-checkbox">Automatic (scale with window)</label>
-          </div>
-        <div class="resolution-settings">
-            <input class="" type="number" placeholder="Width">
-            <p>x</p>
-            <input type="number" placeholder="Height">
-            <button id="resolution-button">Apply</button>
+            <input type="checkbox" id="resolution-auto" checked />
+            <label for="resolution-auto">Automatic (scale with window)</label>
         </div>
+        <div class="main-settings resolution-section">
+            <input id="resolution-w" type="number" placeholder="Width" min="0">
+            <p>x</p>
+            <input id="resolution-h" type="number" placeholder="Height" min="0">
+            <button id="resolution-apply">Apply</button>
+        </div>
+        <h2>Number of boids</h2>
+        <div class="main-settings boids-n-section">
+            <input id="boids-n" type="number" value="150" min="0">
+            <button id="boids-apply">Apply</button>
+        </div>
+        <h2>Scale</h2>
+        <div class="main-settings scale-section">
+            <input id="scale-field" type="number" value="1" min="0.1" step="0.1">
+            <button id="scale-apply">Apply</button>
+        </div>
+        <h2>Canvas color</h2>
+        <div class="main-settings canvas-color-section">
+            <input type="color" id="canvas-color-input" value="#e6dfcd">
+            <div>Hex</div>
+            <input type="text" maxlength="6" id="canvas-color-field" value="e6dfcd">
+            <button id="canvas-color-apply">Apply</button>
+        </div>
+        <h2>Boid display</h2>
+        <div>
+            <input type="checkbox" id="boid-display-checkbox"/>
+            <label for="boid-display-checkbox">Don't leave trails</label>
+        </div>
+    </div>
+    <div class="window right" id="right-window">
+        <div class="button-row">
+            <button id="presets-btn" class="toggled">Presets</button>
+            <button id="colors-btn">Colors</button>
+            <button id="boids-btn">Boids</button>
+        </div>
+        <div id="presets"></div>
+        <div id="colors" class="hidden">
+            <div id="colors-list">
 
+            </div>
+            <button id="add-color-btn">+ Add color</button>
+            <!-- <div class="color">
+                <input type="color">
+                <div>Hex</div>
+                <input type="text" maxlength="8">
+                <div>Weight</div>
+                <input type="number" value="250" min="0">
+                <button>X</button>
+            </div> -->
+        </div>
+        <div id="settings" class="hidden"></div>
     </div>
-    <div class="window right">
-        <div id="settings"></div>
-    </div>
+    <script src="colors.js"></script>
     <script src="rainbow.js"></script>
     <script src="boids.js"></script>
     <script src="settings.js"></script>
