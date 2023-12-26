@@ -62,9 +62,9 @@ function applyPreset(preset) {
     const colors = preset.colors;
     const colorWeights = preset.colorWeights;
     backgroundColor = preset.backgroundColor;
-    sizeBase = preset.sizeBase || 2;
-    sizeVariable = preset.sizeVariable || 14;
-    sizeVariableMaxAngle = preset.sizeVariableMaxAngle || 90;
+    sizeBase = preset.sizeBase == undefined ? 2 : preset.sizeBase;
+    sizeVariable = preset.sizeVariable == undefined ? 14 : preset.sizeVariable;
+    sizeVariableMaxAngle = preset.sizeVariableMaxAngle == undefined ? 90 : preset.sizeVariableMaxAngle;
     boidsNumber = opts.boids;
     boids = new Boids(opts);
     const settings = [

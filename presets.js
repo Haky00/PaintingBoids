@@ -341,4 +341,68 @@ var presets = [
             1
         ]
     }),
+    new Preset("Trinity Force", "trinity.png", {
+        "backgroundColor": "#000000",
+        "sizeBase": 0.5,
+        "sizeVariable": 1.6,
+        "sizeVariableMaxAngle": 180,
+        "opts": {
+            "boids": 150,
+            "speedLimit": 1.15,
+            "accelerationLimit": 5.84,
+            "alignmentDistance": 547.3,
+            "alignmentForce": 0.166,
+            "cohesionDistance": 969.6,
+            "cohesionForce": 0.399,
+            "separationDistance": 682.4,
+            "separationForce": 0.338
+        },
+        "colors": [
+            "#ff0000ff",
+            "#ff8000ff",
+            "#00ffffff",
+            "#008000ff",
+            "#ff80ffff"
+        ],
+    
+        "colorWeights": [
+            1,
+            1,
+            1,
+            1,
+            1
+        ]
+    }),
+    new Preset("Liferoot", "liferoot.png", {
+        "backgroundColor": "#65a848",
+        "sizeBase": 0,
+        "sizeVariable": 8,
+        "sizeVariableMaxAngle": 90,
+        "opts": {
+            "boids": 1000,
+            "speedLimit": 1.43,
+            "accelerationLimit": 10,
+            "alignmentDistance": 1000,
+            "alignmentForce": 0.165,
+            "cohesionDistance": 203.3,
+            "cohesionForce": 0.5,
+            "separationDistance": 10,
+            "separationForce": 0.5
+        },
+        "colors": [
+            "#8e551fff",
+            "#75461aff",
+            "#9f5f23ff",
+            "#f57cfeff",
+            "#5adf2aff"
+        ],
+    
+        "colorWeights": [
+            4,
+            4,
+            4,
+            1,
+            2
+        ]
+    }),
 ];
