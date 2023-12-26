@@ -405,4 +405,34 @@ var presets = [
             2
         ]
     }),
+    new Preset("Fire", "fire.png", {
+        "backgroundColor": "#000000",
+        "sizeBase": 0,
+        "sizeVariable": 10,
+        "sizeVariableMaxAngle": 30,
+        "opts": {
+            "boids": 1000,
+            "speedLimit": 8,
+            "accelerationLimit": 3.18,
+            "alignmentDistance": 807.4,
+            "alignmentForce": 0.36,
+            "cohesionDistance": 250,
+            "cohesionForce": 0.5,
+            "separationDistance": 614.9,
+            "separationForce": 0.172
+        },
+        "colors": [
+            "#e3100430",
+            "#f9ed6080",
+            "#ff800030",
+            "#f5bf0540"
+        ],
+    
+        "colorWeights": [
+            8,
+            1,
+            5,
+            2
+        ]
+    }),
 ];
