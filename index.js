@@ -25,6 +25,8 @@ const canvasColorField = document.getElementById('canvas-color-field');
 const canvasColorButton = document.getElementById('canvas-color-apply');
 const canvasColorInput = document.getElementById('canvas-color-input');
 const boidDisplayCheckbox = document.getElementById('boid-display-checkbox');
+const randomColorsButton = document.getElementById('random-colors-btn');
+const randomBoidsButton = document.getElementById('random-boids-btn');
 
 resetButton.onclick = () => reset(true);
 pauseButton.onclick = playPlause;
@@ -38,12 +40,14 @@ applyBoidsButton.onclick = applyBoidsNumber;
 presetsButton.onclick = () => switchTab(0);
 colorsButton.onclick = () => switchTab(1);
 boidsButton.onclick = () => switchTab(2);
-addColorButton.onclick = () => colorList.addColor(new ColorInfo("#" + ((1 << 24) * Math.random() | 0).toString(16).padStart(6, "0"), 1));
+addColorButton.onclick = () => colorList.addColor(new ColorInfo(getRandomColor(), 1));
 canvasColorField.oninput = canvasColorFieldChanged;
 canvasColorInput.oninput = canvasColorInputChanged;
 canvasColorButton.onclick = () => reset(true);
 scaleApplyButton.onclick = scaleApply;
 boidDisplayCheckbox.onchange = boidDisplayChanged;
+randomColorsButton.onclick = randomizeColors;
+randomBoidsButton.onclick = randomizeBoids;
 
 var boids, backgroundColor, colorList;
 
@@ -77,19 +81,19 @@ function applyPreset(preset) {
         new NumericValueSetting('Alignment distance', opts.alignmentDistance, 0, 1000, 0.1, 1, function (newValue) {
             boids.change({ alignmentDistance: newValue });
         }),
-        new NumericValueSetting('Alignment force', opts.alignmentForce, 0, 0.5, 0.001, 3, function (newValue) {
+        new NumericValueSetting('Alignment force', opts.alignmentForce, -0.5, 0.5, 0.001, 3, function (newValue) {
             boids.change({ alignmentForce: newValue });
         }),
         new NumericValueSetting('Cohesion distance', opts.cohesionDistance, 0, 1000, 0.1, 1, function (newValue) {
             boids.change({ cohesionDistance: newValue });
         }),
-        new NumericValueSetting('Cohesion force', opts.cohesionForce, 0, 0.5, 0.001, 3, function (newValue) {
+        new NumericValueSetting('Cohesion force', opts.cohesionForce, -0.5, 0.5, 0.001, 3, function (newValue) {
             boids.change({ cohesionForce: newValue });
         }),
         new NumericValueSetting('Separation distance', opts.separationDistance, 0, 1000, 0.1, 1, function (newValue) {
             boids.change({ separationDistance: newValue });
         }),
-        new NumericValueSetting('Separation force', opts.separationForce, 0, 0.5, 0.001, 3, function (newValue) {
+        new NumericValueSetting('Separation force', opts.separationForce, -0.5, 0.5, 0.001, 3, function (newValue) {
             boids.change({ separationForce: newValue });
         }),
         new NumericValueSetting('Base paint size', sizeBase, -40, 40, 0.1, 1, function (newValue) {
@@ -102,7 +106,7 @@ function applyPreset(preset) {
             sizeVariableMaxAngle = newValue;
         }),
     ];
-    document.getElementById('settings').innerHTML = '';
+    document.getElementById('settings-list').innerHTML = '';
     for (var i = 0; i < settings.length; i++) {
         settings[i].createElements();
     }
@@ -118,6 +122,55 @@ function applyPreset(preset) {
 
     reset(true);
     boids.addEventListener('tick', tick);
+}
+
+function getRandomFloat(min, max) {
+    return Math.random() * (max - min) + min;
+}
+
+function getRandomInt(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min) + min);
+}
+
+function getRandomColor() {
+    return "#" + ((1 << 24) * Math.random() | 0).toString(16).padStart(6, "0");
+}
+
+function randomizeBoids() {
+    let preset = presetFromCurrentSettings();
+
+    preset.sizeBase = getRandomFloat(-1, 15);
+    preset.sizeVariable = getRandomFloat(-5, 20);
+    preset.sizeVariableMaxAngle = getRandomFloat(1, 180);
+    preset.opts.boids = getRandomInt(1, 2001);
+    preset.opts.speedLimit = getRandomFloat(0.1, 4);
+    preset.opts.accelerationLimit = getRandomFloat(0, 10);
+    preset.opts.alignmentDistance = getRandomFloat(0, 350);
+    preset.opts.alignmentForce = getRandomFloat(-0.5, 0.5);
+    preset.opts.cohesionDistance = getRandomFloat(0, 350);
+    preset.opts.cohesionForce = getRandomFloat(-0.5, 0.5);
+    preset.opts.separationDistance = getRandomFloat(0, 350);
+    preset.opts.separationForce = getRandomFloat(-0.5, 0.5);
+
+    applyPreset(preset);
+}
+
+function randomizeColors() {
+    let preset = presetFromCurrentSettings();
+
+    preset.backgroundColor = getRandomColor();
+    let colorCount = getRandomInt(1, 9);
+
+    preset.colors = [];
+    preset.colorWeights = [];
+    for (let i = 0; i < colorCount; i++) {
+        preset.colors.push(getRandomColor());
+        preset.colorWeights.push(getRandomInt(1, 11));
+    }
+
+    applyPreset(preset);
 }
 
 function tick() {
@@ -153,7 +206,7 @@ function loadPreset() {
     applyPreset(preset);
 }
 
-function copyPresetToClipboard() {
+function presetFromCurrentSettings() {
     var preset = {
         backgroundColor: backgroundColor,
         sizeBase: sizeBase,
@@ -176,8 +229,12 @@ function copyPresetToClipboard() {
     for (var i = 0; i < colorList.colors.length; i++) {
         preset.colors.push(colorList.colors[i].color);
         preset.colorWeights.push(colorList.colors[i].weight);
-    }
-    navigator.clipboard.writeText(JSON.stringify(preset, null, "\t")
+    };
+    return preset;
+}
+
+function copyPresetToClipboard() {
+    navigator.clipboard.writeText(JSON.stringify(presetFromCurrentSettings(), null, "\t")
         .replaceAll(
             "],\n\t\"",
             "],\n\n\t\""

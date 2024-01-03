@@ -15,7 +15,8 @@
         <h1>Painting boids</h1>
         <p>Create artwork using the <a href="https://en.wikipedia.org/wiki/Boids">boids</a> artificial flocking
             simulation. Imagine a bunch of birds carrying leaky paint buckets.</p>
-        <p>The boids simulation was taken from <a href="https://github.com/hughsk/boids">this</a> repository and
+        <p>The boids simulation algorithm was taken from <a href="https://github.com/hughsk/boids">this</a> repository
+            and
             modified.</p>
         <p>You can pause using [Spacebar] and reset using [R], or use the buttons below. Click the canvas to toggle the
             UI.</p>
@@ -43,13 +44,6 @@
                 <button id="resolution-apply">Apply</button>
             </div>
         </div>
-        <div title="Number of boids to simulate. Recommeneded values are between 1-4000.">
-            <h2>Number of boids</h2>
-            <div class="main-settings boids-n-section">
-                <input id="boids-n" type="number" value="150" min="0">
-                <button id="boids-apply">Apply</button>
-            </div>
-        </div>
         <div
             title="Use this setting to produce a higher quality image. If used with automatic resolution, it will also scale the resolution (so an automatic size of 1000x500 will produce a 2000x1000 image). Recommeneded values are between 0.25-8.">
             <h2>Scale</h2>
@@ -59,21 +53,9 @@
             </div>
         </div>
         <div>
-            <h2>Canvas color</h2>
-            <div class="main-settings canvas-color-section">
-                <input type="color" id="canvas-color-input" value="#e6dfcd">
-                <div>Hex</div>
-                <input type="text" maxlength="6" id="canvas-color-field" value="e6dfcd">
-                <button id="canvas-color-apply">Apply</button>
-            </div>
+            <a href="https://github.com/Haky00/PaintingBoids">GitHub repository</a>
         </div>
-        <div>
-            <h2>Boid display</h2>
-            <div>
-                <input type="checkbox" id="boid-display-checkbox" />
-                <label for="boid-display-checkbox">Don't leave trails</label>
-            </div>
-        </div>
+
     </div>
     <div class="window right" id="right-window">
         <div class="button-row">
@@ -86,11 +68,35 @@
             </div>
         </div>
         <div id="colors" class="hidden">
+            <h2>Randomize</h2>
+            <button id="random-colors-btn">Randomize colors</button>
+            <h2>Canvas color</h2>
+            <div class="main-settings canvas-color-section">
+                <input type="color" id="canvas-color-input" value="#e6dfcd">
+                <div>Hex</div>
+                <input type="text" maxlength="6" id="canvas-color-field" value="e6dfcd">
+                <button id="canvas-color-apply">Apply</button>
+            </div>
+            <h2>Colors</h2>
             <div id="colors-list">
             </div>
             <button id="add-color-btn">+ Add color</button>
         </div>
-        <div id="settings" class="hidden"></div>
+        <div id="settings" class="hidden">
+            <h2>Randomize</h2>
+            <button id="random-boids-btn">Randomize boids</button>
+            <h2>Boid display</h2>
+            <div>
+                <input type="checkbox" id="boid-display-checkbox" />
+                <label for="boid-display-checkbox">Don't leave trails</label>
+            </div>
+            <h2>Number of boids</h2>
+            <div class="main-settings boids-n-section">
+                <input id="boids-n" type="number" value="150" min="0">
+                <button id="boids-apply">Apply</button>
+            </div>
+            <div id="settings-list"></div>
+        </div>
     </div>
     <script src="colors.js"></script>
     <script src="rainbow.js"></script>

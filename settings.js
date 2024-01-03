@@ -1,7 +1,7 @@
 class NumericValueSetting {
     constructor(title, initialValue, min, max, step, decimals, callback) {
         this.title = title || 'Sample Numeric Setting';
-        this.initialValue = initialValue || 50;
+        this.initialValue = initialValue == undefined ? 50 : initialValue;
         this.min = min || 0;
         this.max = max || 100;
         this.step = step || 1;
@@ -12,7 +12,7 @@ class NumericValueSetting {
     }
 
     createElements() {
-        const settingsDiv = document.getElementById('settings');
+        const settingsDiv = document.getElementById('settings-list');
 
         const settingDiv = document.createElement('div');
         settingDiv.classList.add('setting');
