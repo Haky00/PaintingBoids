@@ -141,18 +141,18 @@ function getRandomColor() {
 function randomizeBoids() {
     let preset = presetFromCurrentSettings();
 
-    preset.sizeBase = getRandomFloat(-1, 15);
-    preset.sizeVariable = getRandomFloat(-5, 20);
-    preset.sizeVariableMaxAngle = getRandomFloat(1, 180);
-    preset.opts.boids = getRandomInt(1, 2001);
-    preset.opts.speedLimit = getRandomFloat(0.1, 4);
-    preset.opts.accelerationLimit = getRandomFloat(0, 10);
-    preset.opts.alignmentDistance = getRandomFloat(0, 350);
-    preset.opts.alignmentForce = getRandomFloat(-0.5, 0.5);
-    preset.opts.cohesionDistance = getRandomFloat(0, 350);
-    preset.opts.cohesionForce = getRandomFloat(-0.5, 0.5);
-    preset.opts.separationDistance = getRandomFloat(0, 350);
-    preset.opts.separationForce = getRandomFloat(-0.5, 0.5);
+    preset.sizeBase = getRandomFloat(-1, 6);
+    preset.sizeVariable = getRandomFloat(5, 25);
+    preset.sizeVariableMaxAngle = getRandomFloat(50, 130);
+    preset.opts.boids = getRandomInt(1, 1001);
+    preset.opts.speedLimit = getRandomFloat(0.4, 3.5);
+    preset.opts.accelerationLimit = getRandomFloat(0.1, 10);
+    preset.opts.alignmentDistance = getRandomFloat(0, 200);
+    preset.opts.alignmentForce = getRandomFloat(-0.3, 0.3);
+    preset.opts.cohesionDistance = getRandomFloat(0, 250);
+    preset.opts.cohesionForce = getRandomFloat(-0.15, 0.15);
+    preset.opts.separationDistance = getRandomFloat(0, 200);
+    preset.opts.separationForce = getRandomFloat(-0.1, 0.1);
 
     applyPreset(preset);
 }
