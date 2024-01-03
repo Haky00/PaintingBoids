@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Boids Simulation</title>
+    <title>Painting Boids</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&display=swap" rel="stylesheet">
@@ -15,8 +15,10 @@
         <h1>Painting boids</h1>
         <p>Create artwork using the <a href="https://en.wikipedia.org/wiki/Boids">boids</a> artificial flocking
             simulation. Imagine a bunch of birds carrying leaky paint buckets.</p>
-        <p>The boids simulation was taken from <a href="https://github.com/hughsk/boids">this</a> repository and modified.</p>
-        <p>You can pause using [Spacebar] and reset using [R], or use the buttons below. Click the canvas to toggle the UI.</p>
+        <p>The boids simulation was taken from <a href="https://github.com/hughsk/boids">this</a> repository and
+            modified.</p>
+        <p>You can pause using [Spacebar] and reset using [R], or use the buttons below. Click the canvas to toggle the
+            UI.</p>
         <div class="button-row">
             <button id="reset-btn">Reset</button>
             <button id="clear-btn">Clear canvas</button>
@@ -27,38 +29,50 @@
             <button id="copy-btn">Copy settings</button>
             <button id="load-btn">Load settings</button>
         </div>
-        <h2>Resolution</h2>
+        <div
+            title="Set the size of the simulated plane, and also the resolution of the saved image. Automatic resolution will fill all the available space, depending on the browser window size.">
+            <h2>Resolution</h2>
+            <div>
+                <input type="checkbox" id="resolution-auto" checked />
+                <label for="resolution-auto">Automatic (scale with window)</label>
+            </div>
+            <div class="main-settings resolution-section">
+                <input id="resolution-w" type="number" placeholder="Width" min="0">
+                <p>x</p>
+                <input id="resolution-h" type="number" placeholder="Height" min="0">
+                <button id="resolution-apply">Apply</button>
+            </div>
+        </div>
+        <div title="Number of boids to simulate. Recommeneded values are between 1-4000.">
+            <h2>Number of boids</h2>
+            <div class="main-settings boids-n-section">
+                <input id="boids-n" type="number" value="150" min="0">
+                <button id="boids-apply">Apply</button>
+            </div>
+        </div>
+        <div
+            title="Use this setting to produce a higher quality image. If used with automatic resolution, it will also scale the resolution (so an automatic size of 1000x500 will produce a 2000x1000 image). Recommeneded values are between 0.25-8.">
+            <h2>Scale</h2>
+            <div class="main-settings scale-section">
+                <input id="scale-field" type="number" value="1" min="0.1" step="0.1">
+                <button id="scale-apply">Apply</button>
+            </div>
+        </div>
         <div>
-            <input type="checkbox" id="resolution-auto" checked />
-            <label for="resolution-auto">Automatic (scale with window)</label>
+            <h2>Canvas color</h2>
+            <div class="main-settings canvas-color-section">
+                <input type="color" id="canvas-color-input" value="#e6dfcd">
+                <div>Hex</div>
+                <input type="text" maxlength="6" id="canvas-color-field" value="e6dfcd">
+                <button id="canvas-color-apply">Apply</button>
+            </div>
         </div>
-        <div class="main-settings resolution-section">
-            <input id="resolution-w" type="number" placeholder="Width" min="0">
-            <p>x</p>
-            <input id="resolution-h" type="number" placeholder="Height" min="0">
-            <button id="resolution-apply">Apply</button>
-        </div>
-        <h2>Number of boids</h2>
-        <div class="main-settings boids-n-section">
-            <input id="boids-n" type="number" value="150" min="0">
-            <button id="boids-apply">Apply</button>
-        </div>
-        <h2>Scale</h2>
-        <div class="main-settings scale-section">
-            <input id="scale-field" type="number" value="1" min="0.1" step="0.1">
-            <button id="scale-apply">Apply</button>
-        </div>
-        <h2>Canvas color</h2>
-        <div class="main-settings canvas-color-section">
-            <input type="color" id="canvas-color-input" value="#e6dfcd">
-            <div>Hex</div>
-            <input type="text" maxlength="6" id="canvas-color-field" value="e6dfcd">
-            <button id="canvas-color-apply">Apply</button>
-        </div>
-        <h2>Boid display</h2>
         <div>
-            <input type="checkbox" id="boid-display-checkbox" />
-            <label for="boid-display-checkbox">Don't leave trails</label>
+            <h2>Boid display</h2>
+            <div>
+                <input type="checkbox" id="boid-display-checkbox" />
+                <label for="boid-display-checkbox">Don't leave trails</label>
+            </div>
         </div>
     </div>
     <div class="window right" id="right-window">
@@ -69,25 +83,12 @@
         </div>
         <div id="presets">
             <div id="presets-list">
-                <!-- <div class="preset">
-                    <img src="image.png">
-                    <div>Preset name</div>
-                    <button>Use</button>
-                </div> -->
             </div>
         </div>
         <div id="colors" class="hidden">
             <div id="colors-list">
             </div>
             <button id="add-color-btn">+ Add color</button>
-            <!-- <div class="color">
-                <input type="color">
-                <div>Hex</div>
-                <input type="text" maxlength="8">
-                <div>Weight</div>
-                <input type="number" value="250" min="0">
-                <button>X</button>
-            </div> -->
         </div>
         <div id="settings" class="hidden"></div>
     </div>

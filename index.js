@@ -331,9 +331,6 @@ document.body.onkeyup = function (e) {
     if (e.key == "r" || e.key == "R") {
         reset(true);
     }
-    // if (e.key == "s" || e.key == "S") {
-    //     save();
-    // }
 }
 
 for (var i = 0; i < presets.length; i++) {

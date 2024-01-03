@@ -1,3 +1,5 @@
+// This code is taken from (and altered) here: https://github.com/hughsk/boids
+
 var POSITIONX = 0
     , POSITIONY = 1
     , SPEEDX = 2

@@ -14,7 +14,7 @@ class Preset extends EventTarget {
         presetDiv.classList.add('preset');
 
         const image = document.createElement('img');
-        image.src = this.imagePath;
+        image.src = "thumbnails/" +this.imagePath;
         presetDiv.appendChild(image);
 
         const presetName = document.createElement('div');

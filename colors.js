@@ -9,9 +9,8 @@ class ColorInfo extends EventTarget {
     }
 
     getHexWithAlpha(hexColor) {
-        // Ensure the hex code always contains the alpha channel (opacity)
         if (hexColor.length === 7) {
-            hexColor += 'ff'; // Default alpha value 'FF' (opaque)
+            hexColor += 'ff';
         } else if (hexColor.length === 4) {
             hexColor = '#' + hexColor[1] + hexColor[1] + hexColor[2] + hexColor[2] + hexColor[3] + hexColor[3] + 'FF';
         }
@@ -55,7 +54,6 @@ class ColorInfo extends EventTarget {
 
         colorsDiv.appendChild(colorDiv);
 
-        // Linking inputs to class attributes
         colorInput.addEventListener('input', (event) => {
             this.color = event.target.value + this.color.substring(this.color.length - 2, this.color.length);
             hexInput.value = this.getHexWithAlpha(this.color).replace('#', '');
@@ -64,7 +62,7 @@ class ColorInfo extends EventTarget {
         hexInput.addEventListener('input', (event) => {
             const hexValue = event.target.value;
             this.color = `#${this.getHexWithAlpha(hexValue)}`;
-            const rgbHex = this.color.substring(0, 7); // Extracting only RGB components
+            const rgbHex = this.color.substring(0, 7);
             colorInput.value = rgbHex;
         });
 

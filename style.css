@@ -5,15 +5,15 @@ body {
     font-family: 'PT Serif', serif;
     display: flex;
     flex-direction: row;
-    height: 100vh;
+    height: 100%;
 }
 
 canvas {
     margin: auto;
     display: block;
     outline: 1px solid #55649ab0;
-    max-height: 100vh;
-    max-width: 100vw;
+    max-height: 100%;
+    max-width: 100%;
 }
 
 h1,
